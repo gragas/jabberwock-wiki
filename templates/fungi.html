@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>{{.Name}}</title>
+	  <link href='https://fonts.googleapis.com/css?family=Catamaran' rel='stylesheet' type='text/css'>
+	  <link href='/css/list.css' rel='stylesheet' type='text/css'>
+	</head>
+	<body>
+	  <h1>{{.Name}}</h1>
+	  <b>{{.Rarity}}</b>
+	  <p>{{.Description}}<p>
+		<h3>Immediate Effects</h3>
+		<ul>
+		  {{ range $index, $effect := .ImmediateEffects }}
+		  <li>{{ $effect }}</li>
+		  {{ end }}
+		</ul>
+		<h3>Duration Effects ({{ .Duration }})</h3>
+		<ul>
+		  {{ range $index, $effect := .DurationEffects }}
+		  <li>{{ $effect }}</li>
+		  {{ end }}
+		</ul>
+	</body>
+</html>
