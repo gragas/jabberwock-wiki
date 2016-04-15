@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"github.com/gragas/fsnotify"
 	"github.com/gragas/jabberwock-lib/ingredient"
 	"html/template"
 	"io/ioutil"
@@ -54,6 +55,27 @@ func main() {
 		fmt.Printf("SERVER: Starting on \033[0;31m")
 		fmt.Printf("%v\033[0m:\033[0;34m%v\033[0m\n", ip, port)
 	}
+
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		panic(err)
+	}
+	go func() {
+		for {
+			select {
+			case _ = <-watcher.Event:
+				generateAllPages()
+			case err := <-watcher.Error:
+				fmt.Printf("SERVER: WATCHER: error: %v\n", err)
+			}
+		}
+	}()
+	err = watcher.Watch("./")
+	if err != nil {
+		panic(err)
+	}
+	defer watcher.Close()
+
 	log.Fatal(http.ListenAndServe(binding, nil))
 }
 
